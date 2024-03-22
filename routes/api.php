@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('auth/register', Auth\RegisterController::class);
+Route::post('auth/login', Auth\LoginController::class);
