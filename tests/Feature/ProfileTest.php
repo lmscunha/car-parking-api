@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+// use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -41,5 +41,18 @@ class ProfileTest extends TestCase
             'name' => 'John Updated',
             'email' => 'john_updated@example.com'
         ]);
+    }
+
+    public function testUserCanChangePassword()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->putJson('/api/v1/password', [
+            'current_password' => 'password',
+            'password' => 'testing123',
+            'password_confirmation' => 'testing123',
+        ]);
+
+        $response->assertStatus(202);
     }
 }
