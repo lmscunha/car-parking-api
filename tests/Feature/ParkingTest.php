@@ -65,4 +65,35 @@ class ParkingTest extends TestCase
                 ]
             ]);
     }
+
+    public function testUserCanStopParking()
+    {
+        $user = User::factory()->create();
+        $vehicle = Vehicle::factory()->create(['user_id' => $user->id]);
+        $zone = Zone::first();
+
+        $this->actingAs($user)->postJson('/api/v1/parkings/start', [
+            'vehicle_id' => $vehicle->id,
+            'zone_id' => $zone->id
+        ]);
+
+        $this->travel(2)->hours();
+
+        $parking = Parking::first();
+        $response = $this->actingAs($user)->putJson('/api/v1/parkings/' . $parking->id);
+
+        $updateParking = Parking::find($parking->id);
+
+        $response->assertStatus(200)
+            ->assertJsonStructure(['data'])
+            ->assertJson([
+                'data' => [
+                    'start_time' => $updateParking->start_time->toDateTimeString(),
+                    'stop_time' => $updateParking->stop_time->toDateTimeString(),
+                    'total_price' => $updateParking->total_price,
+                ]
+            ]);
+
+        $this->assertDatabaseCount('parkings', '1');
+    }
 }
