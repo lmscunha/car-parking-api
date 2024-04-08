@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Resources\VehicleResource;
 use App\Models\Vehicle;
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * @group Vehicles
+ */
 class VehicleController extends Controller
 {
     /**
